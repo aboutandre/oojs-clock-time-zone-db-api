@@ -1,5 +1,11 @@
 <template>
-  <div id="app">{{ info }}</div>
+  <div id="app">
+    <span>
+    {{ timestamp }}
+    </span>
+    <button @click="unixTime()">Show me the time</button>
+    <button @click="timestampToHour()">Show me the hours</button>
+    </div>
 </template>
 <script>
 import axios from "axios";
@@ -8,14 +14,28 @@ export default {
   // el: "#app",
   data() {
     return {
-      info: null
+      info: null,
+      timestamp: null,
+      hours: null
     };
   },
   mounted() {
     axios
       .get("http://api.timezonedb.com/v2.1/list-time-zone?key=PVVEZXX7L9E5&format=json&country=NZ")
-      .then(response => (this.info = response.data.status))
-      .then(response => (console.log(response.data)));
+      // .then(response => (console.log(response.data.zones[0].timestamp)))
+      // .then(response => (this.data = response.data))
+      .then(response => (this.timestamp = response.data.zones[0].timestamp))
+  },
+  methods: {
+    unixTime: function (timestamp) {
+      console.log(this.timestamp);
+    },
+    timestampToHour: function (timestamp) {
+       const timeToHour = function () {
+        (this.hours * 1000).getHours();
+      }
+      console.log(timeToHour);
+    }
   }
 };
 </script>
