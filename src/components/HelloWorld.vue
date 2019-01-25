@@ -3,7 +3,7 @@
     <span>{{ locationData }}</span>
     <button @click="unixTime()">Show me the time</button>
     <button @click="timestampToHour()">Show me the hours</button>
-    <span>This is formatted: {{ dst }}</span>
+    <span>This is formatted: {{ formatted }}</span>
   </div>
 </template>
 <script>
@@ -24,7 +24,7 @@ export default {
   watch: {
     locationData: function() {
       this.timestamp = this.locationData.timestamp;
-
+      this.timestampToHour();
       /**
        * I need to update all these paremeter using this watch.
        * I'll need to write computed (?) properties to deal with this.
@@ -33,9 +33,9 @@ export default {
     dst: function() {
       this.dst = this.locationData.dst;
     },
-    formatted: function() {
-      this.formatted = this.locationData.formatted;
-    }
+    // formatted: function() {
+    //   this.formatted = this.locationData.formatted;
+    // }
   },
   // watch: {
   //   locationTimestamp() {
@@ -87,7 +87,8 @@ export default {
       // console.log((this.currentHours()));
       // console.log((this.currentMinutes()));
       // console.log((this.currentSeconds()));
-      console.log(formattedTime);
+      // console.log(formattedTime);
+      this.formatted = formattedTime;
       // return (this.timestamp * 1000).getHours();
     }
   }
