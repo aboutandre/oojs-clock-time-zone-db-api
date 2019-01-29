@@ -1,12 +1,13 @@
 <template>
-    <div class="p-3">
-        <div class="d-flex flex-column pt-3">
+    <div class="p-3 flex-grow-1 d-flex flex-column justify-content-center">
+        <div class="d-flex flex-column">
             <h1>Based on your current location your time is:</h1>
-            <h2>{{ formatted }}</h2>
-
-            <!--<p>{{backgroundImage}}</p>-->
-
-            <h4>Near you:</h4>
+            <div class="time">
+            <h2 class="formatted-time">{{ formatted }}</h2>
+            </div>
+        </div>
+        <div class="pt-5">
+            <h4 class="pb-3">Here are some photos taken near you:</h4>
             <img :src="imageURL" alt="" class="background-image">
         </div>
     </div>
@@ -145,24 +146,14 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
     .background-image {
+        border: 1em solid #fcfcfc;
+        border-radius: 1.5em;
         width: 100%;
         height: auto;
-    }
-    h3 {
-        margin: 40px 0 0;
+        transform: rotate3d(0, 0, 1, -1.5deg);
     }
 
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
-
-    a {
-        color: #42b983;
+    h1, h2, h3 {
+        font-weight: 300;
     }
 </style>
