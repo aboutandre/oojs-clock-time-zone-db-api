@@ -3,6 +3,11 @@
         <div class="d-flex flex-column pt-3">
             <h1>Based on your current location your time is:</h1>
             <h2>{{ formatted }}</h2>
+
+            <!--<p>{{backgroundImage}}</p>-->
+
+            <h4>Near you:</h4>
+            <img :src="imageURL" alt="" class="background-image">
         </div>
     </div>
 </template>
@@ -19,7 +24,16 @@
                 dst: null,
                 formatted: null,
                 lng: null,
-                lat: null
+                lat: null,
+                imagesFound: null,
+                imageSelected: null,
+                imageTitle: null,
+                backgroundImage: null,
+                farmNumber: null,
+                serverId: null,
+                imageId: null,
+                imageSecret: null,
+                imageURL: null
             };
         },
         watch: {
@@ -28,6 +42,7 @@
                 this.dstCheck();
                 this.runClock();
                 this.timestampToHour();
+                this.setBackgroundImage();
 
                 console.log(
                     "This is the longitude: " +
@@ -35,7 +50,9 @@
                     ". This is the latitude: " +
                     this.lat +
                     ". This is the timestamp: " +
-                    this.timestamp
+                    this.timestamp +
+                    ". This image data: " +
+                    this.backgroundImage
                 );
             },
             timestamp: function () {
@@ -58,7 +75,23 @@
                                     "&lng=" +
                                     this.lng
                                 )
-                                .then(response => (this.locationData = response.data))
+                                .then(response => (this.locationData = response.data),
+                                    axios
+                                        .get("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e0f4df5292f9e341ca6e3c183930e7a3&lat=" +
+                                            this.lat +
+                                            "&lon=" +
+                                            this.lng +
+                                            "&format=json&nojsoncallback=1&auth_token=72157676030409527-aafc0353f58ff6cd&api_sig=479efa7e7db92bf86b9c8c49b276a809")
+                                        .then(response => (
+                                                (this.imagesFound = response.data.photos.photo.length),
+                                                (this.getRandomImage()),
+                                                (this.backgroundImage = response.data.photos.photo[this.imageSelected]),
+                                                (this.farmNumber = response.data.photos.photo[this.imageSelected].farm),
+                                                (this.serverId = response.data.photos.photo[this.imageSelected].server),
+                                                (this.imageId = response.data.photos.photo[this.imageSelected].id),
+                                                (this.imageSecret = response.data.photos.photo[this.imageSelected].secret),
+                                                (this.imageTitle = response.data.photos.photo[this.imageSelected].title)
+                                        )))
                     )
                 );
         },
@@ -98,6 +131,12 @@
                     this.timestamp = this.timestamp + 1;
                 }
                 setInterval(updateClock.bind(this), 1000);
+            },
+            getRandomImage() {
+                this.imageSelected = Math.floor(Math.random() * Math.floor(this.imagesFound));
+            },
+            setBackgroundImage() {
+                this.imageURL = `https://farm${this.farmNumber}.staticflickr.com/${this.serverId}/${this.imageId}_${this.imageSecret}.jpg`;
             }
         }
     };
@@ -105,6 +144,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .background-image {
+        width: 100%;
+        height: auto;
+    }
     h3 {
         margin: 40px 0 0;
     }
