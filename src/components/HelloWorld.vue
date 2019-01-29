@@ -1,19 +1,16 @@
 <template>
-  <div class="p-3">
+  <div id="app">
     <span>{{ locationData }}</span>
-    <div class="d-flex flex-column pt-3">
-      <button class="btn btn-primary mb-3" @click="unixTime()">Show me the time</button>
-      <button class="btn btn-secondary mb-3" @click="timestampToHour()">Show me the hours</button>
-      <span>This is formatted: {{ formatted }}</span>
-      <span>This is lng: {{ lng }}</span>
-      <span>This is lat: {{ lat }}</span>
-    </div>
+    <button @click="unixTime()">Show me the time</button>
+    <button @click="timestampToHour()">Show me the hours</button>
+    <span>This is formatted: {{ formatted }}</span>
   </div>
 </template>
 <script>
 import axios from "axios";
 
 export default {
+  // el: "#app",
   data() {
     return {
       locationData: null,
@@ -21,49 +18,46 @@ export default {
       timestamp: null,
       hours: null,
       dst: null,
-      formatted: null,
-      lng: null,
-      lat: null
+      formatted: null
     };
   },
   watch: {
     locationData: function() {
       this.timestamp = this.locationData.timestamp;
-      this.dstCheck();
       this.timestampToHour();
-
-      console.log(
-        "This is the longitude: " +
-          this.lng +
-          ". This is the latitude: " +
-          this.lat
-      );
-    }
+      /**
+       * I need to update all these paremeter using this watch.
+       * I'll need to write computed (?) properties to deal with this.
+       */
+    },
+    dst: function() {
+      this.dst = this.locationData.dst;
+    },
+    // formatted: function() {
+    //   this.formatted = this.locationData.formatted;
+    // }
   },
+  // watch: {
+  //   locationTimestamp() {
+  //     this.timestamp = this.locationData.zones[0].timestamp;
+  //   }
+  // },
+  // computed: {
+  //   locationTimestamp() {
+  //     this.timestamp = this.locationData.zones[0].timestamp;
+  //     // return this.timestamp;
+  //   }
+  // },
   mounted() {
     axios
       .get(
-        "http://api.ipstack.com/217.110.78.178?access_key=80a79bb513023e29f6d21c4785a67ef8"
+        "http://api.timezonedb.com/v2.1/get-time-zone?key=PVVEZXX7L9E5&format=json&by=zone&zone=Europe/Berlin"
       )
-      .then(
-        response => (
-          this.lng = response.data.longitude,
-          this.lat = response.data.latitude,
-          axios
-            .get(
-              "http://api.timezonedb.com/v2.1/get-time-zone?key=PVVEZXX7L9E5&format=json&by=position&lat=" +
-                this.lat +
-                "&lng=" +
-                this.lng
-            )
-            .then(response => (this.locationData = response.data))
-        )
-      );
+      // .then(response => (console.log(response.data.zones[0].timestamp)))
+      // .then(response => (this.data = response.data))
+      .then(response => (this.locationData = response.data));
   },
   methods: {
-    dstCheck() {
-      return (this.dst = this.locationData.dst);
-    },
     unixTime() {
       console.log(this.timestamp);
       console.log(this.info);
@@ -73,11 +67,7 @@ export default {
       return thisTimeStamp;
     },
     currentHours() {
-      if (this.dst === "0") {
-        return this.date().getHours() - 1;
-      } else {
-        return this.date().getHours();
-      }
+      return this.date().getHours();
     },
     currentMinutes() {
       return "0" + this.date().getMinutes();
@@ -89,7 +79,17 @@ export default {
       const formattedTime = `${this.currentHours()}:${this.currentMinutes().substr(
         -2
       )}:${this.currentSeconds().substr(-2)}`;
+      //  const timeToHour = function () {
+      // (this.hours * 1000).getHours();
+      // }
+      // console.log(() => (this.timestamp * 1000).getHours());
+
+      // console.log((this.currentHours()));
+      // console.log((this.currentMinutes()));
+      // console.log((this.currentSeconds()));
+      // console.log(formattedTime);
       this.formatted = formattedTime;
+      // return (this.timestamp * 1000).getHours();
     }
   }
 };
