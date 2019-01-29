@@ -1,20 +1,27 @@
 <template>
   <div id="app">
     <HelloWorld />
-    <v-select :options="['foo','bar']"></v-select>
+    <time-zone-selector />
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import vSelect from '../node_modules/vue-select/src/components/Select.vue'
+import TimeZoneSelector from './components/TimeZoneSelector.vue'
+// import vSelect from '../node_modules/vue-select/src/components/Select.vue'
 
 export default {
   name: 'app',
   components: {
     HelloWorld,
-    vSelect
-  }
+    TimeZoneSelector,
+    // vSelect
+  },
+  // data() {
+  //   return {
+  //     options: this.$root.$on('zoneList', this.options)
+  //   }
+  // }
 }
 </script>
 
