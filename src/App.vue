@@ -1,16 +1,16 @@
 <template>
     <div id="app">
-        <HelloWorld/>
+        <IpClock/>
     </div>
 </template>
 
 <script>
-    import HelloWorld from './components/HelloWorld.vue'
+    import IpClock from './components/IpClock.vue'
 
     export default {
         name: 'app',
         components: {
-            HelloWorld
+            IpClock
         }
     }
 </script>

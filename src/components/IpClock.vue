@@ -39,22 +39,7 @@
         },
         watch: {
             locationData: function () {
-                this.timestamp = this.locationData.timestamp;
-                this.dstCheck();
-                this.runClock();
-                this.timestampToHour();
-                this.setBackgroundImage();
-
-                console.log(
-                    "This is the longitude: " +
-                    this.lng +
-                    ". This is the latitude: " +
-                    this.lat +
-                    ". This is the timestamp: " +
-                    this.timestamp +
-                    ". This image data: " +
-                    this.backgroundImage
-                );
+                this.startApp();
             },
             timestamp: function () {
                 this.timestampToHour();
@@ -138,6 +123,24 @@
             },
             setBackgroundImage() {
                 this.imageURL = `https://farm${this.farmNumber}.staticflickr.com/${this.serverId}/${this.imageId}_${this.imageSecret}.jpg`;
+            },
+            startApp() {
+                this.timestamp = this.locationData.timestamp;
+                this.dstCheck();
+                this.runClock();
+                this.timestampToHour();
+                this.setBackgroundImage();
+
+                console.log(
+                    "This is the longitude: " +
+                    this.lng +
+                    ". This is the latitude: " +
+                    this.lat +
+                    ". This is the timestamp: " +
+                    this.timestamp +
+                    ". This image data: " +
+                    this.backgroundImage
+                );
             }
         }
     };
@@ -150,7 +153,7 @@
         border-radius: 1.5em;
         width: 100%;
         height: auto;
-        transform: rotate3d(0, 0, 1, -1.5deg);
+        transform: rotate3d(0, 0, 1, -1.2deg);
     }
 
     h1, h2, h3 {
