@@ -1,5 +1,4 @@
 <template>
-            <h1>Based on your current location your time is:</h1>
   <div class="p-3 flex-grow-1 d-flex flex-column justify-content-center">
     <div class="d-flex flex-column">
       <h1>Based on your current location your time is:</h1>
